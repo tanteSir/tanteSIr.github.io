@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="知识图谱," />
+  <meta name="keywords" content="电商架构," />
 
 
 
@@ -79,23 +79,18 @@
 
 
 
-<meta name="description" content="背景： 标签分为两块 ​	1、系统标签，后台配置映射规则，再根据实体字段映射得到 ​	2、手工标签，后台配置标签模版，然后在图析界面可以选择自定义打标或模版打标 手工标签的属性也会有以下几点 ​	1、自定义标签：input输入框打上的标签 ​	2、模版标签：后台预配置好的标签模版，比如性别：男或女 ​	3、私有标签：只能自己看到的标签 ​	4、云标签：自己共享给  别人&#x2F;别的组织  的标">
 <meta property="og:type" content="article">
-<meta property="og:title" content="亿级标签存储、查询方案">
-<meta property="og:url" content="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:title" content="电商架构蓝图">
+<meta property="og:url" content="http://example.com/2023/01/25/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE/index.html">
 <meta property="og:site_name" content="忐忑先生的个人博客">
-<meta property="og:description" content="背景： 标签分为两块 ​	1、系统标签，后台配置映射规则，再根据实体字段映射得到 ​	2、手工标签，后台配置标签模版，然后在图析界面可以选择自定义打标或模版打标 手工标签的属性也会有以下几点 ​	1、自定义标签：input输入框打上的标签 ​	2、模版标签：后台预配置好的标签模版，比如性别：男或女 ​	3、私有标签：只能自己看到的标签 ​	4、云标签：自己共享给  别人&#x2F;别的组织  的标">
 <meta property="og:locale">
-<meta property="og:image" content="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E6%A0%91%E7%BB%93%E6%9E%84.png">
-<meta property="og:image" content="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E6%98%A0%E5%B0%84%E9%85%8D%E7%BD%AE.png">
-<meta property="og:image" content="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E9%A6%96%E9%A1%B5%E6%90%9C%E7%B4%A2-%E4%BA%8C%E6%AC%A1%E6%A3%80%E7%B4%A2.png">
-<meta property="og:image" content="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E7%AD%94%E7%96%91.png">
-<meta property="article:published_time" content="2023-02-05T02:54:37.000Z">
-<meta property="article:modified_time" content="2023-02-05T03:25:38.961Z">
+<meta property="og:image" content="http://example.com/2023/01/25/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE.png">
+<meta property="article:published_time" content="2023-01-25T14:23:48.000Z">
+<meta property="article:modified_time" content="2023-02-05T12:25:16.970Z">
 <meta property="article:author" content="Lin chuxing">
-<meta property="article:tag" content="知识图谱">
+<meta property="article:tag" content="电商架构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E6%A0%91%E7%BB%93%E6%9E%84.png">
+<meta name="twitter:image" content="http://example.com/2023/01/25/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE.png">
 
 
 
@@ -125,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2023/02/05/知识图谱亿级标签存储、查询方案/"/>
+  <link rel="canonical" href="http://example.com/2023/01/25/电商架构蓝图/"/>
 
 
 
 
 
-  <title>亿级标签存储、查询方案 | 忐忑先生的个人博客</title>
+  <title>电商架构蓝图 | 忐忑先生的个人博客</title>
   
 
 
@@ -268,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/25/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -285,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">亿级标签存储、查询方案</h1>
+          <h1 class="post-title" itemprop="name headline">电商架构蓝图</h1>
         
 
         <div class="post-meta">
@@ -297,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-02-05T10:54:37+08:00">
-                2023-02-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-01-25T22:23:48+08:00">
+                2023-01-25
               </time>
             
 
@@ -320,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" itemprop="url" rel="index">
-                    <span itemprop="name">解决方案</span>
+                  <a href="/categories/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index">
+                    <span itemprop="name">架构设计</span>
                   </a>
                 </span>
 
@@ -357,34 +352,7 @@
       
 
       
-        <p>背景：</p>
-<p>标签分为两块</p>
-<p>​	1、系统标签，后台配置映射规则，再根据实体字段映射得到</p>
-<p>​	2、手工标签，后台配置标签模版，然后在图析界面可以选择自定义打标或模版打标</p>
-<p>手工标签的属性也会有以下几点</p>
-<p>​	1、自定义标签：input输入框打上的标签</p>
-<p>​	2、模版标签：后台预配置好的标签模版，比如性别：男或女</p>
-<p>​	3、私有标签：只能自己看到的标签</p>
-<p>​	4、云标签：自己共享给  别人&#x2F;别的组织  的标签，或者别人共享给  自己&#x2F;自己所在组织  的标签，云标签还有认证功能</p>
-<p>根据以上属性，手工标签可以分为手工自定义私有标签、手工模版云标签等。</p>
-<p>考虑到存储的数据量比较大，而且在知识图谱中是比较底层的服务，绝大多数服务都会用到，所以</p>
-<p>1、服务关联性角度</p>
-<pre><code>        1. 改造查询接口，查标签api中提供开关，根据业务需求来控制查或不查
-           2. 通知上游，并设置默认不查
-</code></pre>
-<p>2、性能角度</p>
-<pre><code>1. 系统标签的规则，加载进缓存
- 2. 手工标签用es存储、查询，并配置三种es-mapping（值、共享列表、认证列表）
-</code></pre>
-<p>具体流程设计，参看以下图表：</p>
-<p>一、标签树结构方案</p>
-<p><img src="/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E6%A0%91%E7%BB%93%E6%9E%84.png" alt="系统标签-树结构"></p>
-<p>二、后台的系统标签配置方案</p>
-<p><img src="/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E6%98%A0%E5%B0%84%E9%85%8D%E7%BD%AE.png" alt="系统标签-映射配置"></p>
-<p>三、首页标签搜索方案</p>
-<p><img src="/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE-%E9%A6%96%E9%A1%B5%E6%90%9C%E7%B4%A2-%E4%BA%8C%E6%AC%A1%E6%A3%80%E7%B4%A2.png"></p>
-<p>四、系统标签存储，经常被其他同学理解错的点</p>
-<p><img src="/2023/02/05/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/%E7%B3%BB%E7%BB%9F%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E7%AD%94%E7%96%91.png" alt="系统标签存储答疑"></p>
+        <p><img src="/2023/01/25/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84%E8%93%9D%E5%9B%BE.png"></p>
 
       
     </div>
@@ -402,7 +370,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" rel="tag"># 知识图谱</a>
+            <a href="/tags/%E7%94%B5%E5%95%86%E6%9E%B6%E6%9E%84/" rel="tag"># 电商架构</a>
           
         </div>
       
@@ -415,8 +383,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2023/02/05/%E6%B5%81%E5%BC%8F%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E6%89%93%E9%80%9A%E6%96%B9%E6%A1%88/" rel="next" title="流式实时计算平台与第三方打通方案">
-                <i class="fa fa-chevron-left"></i> 流式实时计算平台与第三方打通方案
+              <a href="/2023/01/17/%E8%B5%B0%E8%BF%9B%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1Seata%E7%9A%84%E4%B8%96%E7%95%8C/" rel="next" title="走进分布式事务Seata的世界">
+                <i class="fa fa-chevron-left"></i> 走进分布式事务Seata的世界
               </a>
             
           </div>
@@ -425,8 +393,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2023/02/05/%E6%B5%81%E5%BC%8F%E5%AE%9E%E6%97%B6%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0%E6%96%B9%E6%A1%88/" rel="prev" title="流式实时计算平台方案">
-                流式实时计算平台方案 <i class="fa fa-chevron-right"></i>
+              <a href="/2023/01/28/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BA%BF%E7%BA%A7%E6%A0%87%E7%AD%BE%E5%AD%98%E5%82%A8%E3%80%81%E6%9F%A5%E8%AF%A2%E6%96%B9%E6%A1%88/" rel="prev" title="亿级标签存储、查询方案">
+                亿级标签存储、查询方案 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
