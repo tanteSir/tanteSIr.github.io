@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="es," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="#【打包及部署发布】 ###方式一、使用 shell 脚本打包与部署发布  执行所有子工程 1sh run.sh  执行指定子工程 1sh run.sh es5-cdh514  PS：支持的版本有 | es-base es-api | es-router | es5-cdh514 | es5-tdh523 | es5-tdh603 | es5-tdh622 | es6-cdh514 | es6-f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="es多版本兼容方案之es-shaded">
+<meta property="og:url" content="http://example.com/2023/02/19/es%E5%A4%9A%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9%E6%96%B9%E6%A1%88%E4%B9%8Bes-shaded/index.html">
+<meta property="og:site_name" content="忐忑先生的个人博客">
+<meta property="og:description" content="#【打包及部署发布】 ###方式一、使用 shell 脚本打包与部署发布  执行所有子工程 1sh run.sh  执行指定子工程 1sh run.sh es5-cdh514  PS：支持的版本有 | es-base es-api | es-router | es5-cdh514 | es5-tdh523 | es5-tdh603 | es5-tdh622 | es6-cdh514 | es6-f">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-02-19T11:33:15.000Z">
+<meta property="article:modified_time" content="2023-02-19T11:36:34.464Z">
+<meta property="article:author" content="Lin chuxing">
+<meta property="article:tag" content="es">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2023/02/19/es多版本兼容方案之es-shaded/"/>
+
+
+
+
+
+  <title>es多版本兼容方案之es-shaded | 忐忑先生的个人博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">忐忑先生的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">但行好事，莫问前程 <br> 加载可能较慢，感谢您的时间，期待能给您带来一点收获 <br> 所有技术都先整理成脑图，后续会逐步增加文字内容，逐步解析脑图细节 <br> 想了解更多我的信息，请点“关于” <br> 历史文章相关，请点“归档”等icon <br> 如果脑图内容太多展示有限，建议下载后放大</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/19/es%E5%A4%9A%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9%E6%96%B9%E6%A1%88%E4%B9%8Bes-shaded/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="忐忑先生的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">es多版本兼容方案之es-shaded</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-02-19T19:33:15+08:00">
+                2023-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" itemprop="url" rel="index">
+                    <span itemprop="name">解决方案</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#【打包及部署发布】 ###方式一、使用 shell 脚本打包与部署发布</p>
+<ul>
+<li><p>执行所有子工程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh run.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行指定子工程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh run.sh es5-cdh514</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>PS：支持的版本有 | es-base es-api | es-router | es5-cdh514 | es5-tdh523 | es5-tdh603 | es5-tdh622 | es6-cdh514 | es6-fic80 | es6-fi651 | es6-hdp314 | es7-cdh514</p>
+<p>###方式二、使用 maven 命令打包与部署发布 在命令行进入特定的 graph-server-esX 工程，执行以下命令打包：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package -T 4C -pl graph-server-es6 -am -Dmaven.test.skip=true -Pes6-fic80</span><br></pre></td></tr></table></figure>
+
+<p>执行以下命令部署到本地 maven 仓库（注意修改版本号）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mvn install:install-file -T 4C -pl graph-server-es6 -am -Dmaven.test.skip=true </span><br><span class="line">    -Dfile=graph-server-es6/target/graph-server-es6-fic80-1.6.0.jar -DgroupId=com.haizhi.graph -DartifactId=graph-server-es6-fic80 </span><br><span class="line">    -Dversion=1.6.0 -Dpackaging=jar -DrepositoryId=Nexus -Durl=https://mvn.stargraph.cn/nexus/content/repositories/releases/</span><br></pre></td></tr></table></figure>
+
+<p>执行以下命令部署到海致私服（注意修改版本号）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mvn deploy:deploy-file -T 4C -pl graph-server-es6  -Dmaven.test.skip=true -Dfile=graph-server-es6/target/graph-server-es6-fi651-1.6.0.jar </span><br><span class="line">    -DgroupId=com.haizhi.graph -DartifactId=graph-server-es6-fi651 -Dversion=1.6.0 -Dpackaging=jar -DrepositoryId=Nexus </span><br><span class="line">    -Durl=https://mvn.stargraph.cn/nexus/content/repositories/releases/</span><br></pre></td></tr></table></figure>
+
+
+
+<p>##【部署的常见错误解决方案】 </p>
+<p>###一、Return code is: 401, ReasonPhrase: Unauthorized 私服使用设置了用户名和密码，需要在 maven 的 settings.xml 文件中增加相应的设置。</p>
+<p>###二、Return code is: 400, ReasonPhrase: Bad Request 如果报【400】错误，可能是仓库已经存在这个 jar，并且仓库策略设置为了不可重复部署【disable redeploy】，需要登录 Nexus，点选仓库（这里是3rd party）， 选择 Configuration 页面，设置 Repository Policy 为【Allow Redeploy】</p>
+<p>###【Maven配置仓库地址、用户名和密码】</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">settings</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/SETTINGS/1.0.0&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">server</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">id</span>&gt;</span>Nexus<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">username</span>&gt;</span>XXX<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">password</span>&gt;</span>XXXXXX<span class="tag">&lt;/<span class="name">password</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>#【支持更多版本】 1、尽量复用标准版本的子工程代码，通过 POM 新增 profile 来引入新版本的依赖包；如果代码不能复用，可以新建一个子工程（参考 es5 和 es5-tdh523、es5-tdh603） 2、需要在根目录的 POM 和 run.sh 中添加新的版本代号 3、打包新版本的 shaded jar，并部署到海致的私服 4、需要在 graph-server-es-router 的 POM 中引入新的版本 shaded jar</p>
+<p>#一、改造的出发点</p>
+<p>graph 工程的 POM 根据大数据平台的支持版本定义了非常多的 profile（TDH5.2.3、TDH 6.0.3、FI C80、FI 651、HDP 3.1.4 等等）， 但对于引用的 ES 版本（可能是标准版也可能是改造过的大数据平台特定版本）是固定的，当有两个客户使用的同一种大数据平台但 ES 使用不同的版本 （例如一个用大数据平台内的版本，另一个用开源的，甚至 ES 的基准版本都有差异），这时，profile 无法有效切换，打包很不方便。</p>
+<p>#二、子项目结构的调整策略 ###1、原来的项目结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph</span><br><span class="line">    – graph-server</span><br><span class="line">        – graph-server-es（ES 5.x）</span><br><span class="line">        – graph-server-es-tdh523（ES 5.x + TDH 5.2.3）</span><br><span class="line">        – graph-server-es-tdh603（ES 5.x + TDH 6.0.3）</span><br><span class="line">        – graph-server-es-tdh622（ES 5.x + TDH 6.2.2）</span><br><span class="line">        – graph-server-es6（ES 6.x）</span><br><span class="line">        – graph-server-es7（ES 7.x）</span><br></pre></td></tr></table></figure>
+
+<p>POM 文件关键点：</p>
+<p>1）graph-server-esXXX 各个子工程都对支持的大数据平台版本（TDH5.2.3、TDH 6.0.3、FI C80、FI 651、HDP 3.1.4 等等）定义了不同的 ES 基础包依赖 （可能是标准版也可能是改造过的大数据平台特定版本，jar 放置在公司的 Nexus 仓库上）；</p>
+<p>2）graph-server 的 POM 文件中通过 profile 定义了引用的 graph-server-esXXX 模块，由此固化了大数据平台 profile 和 ES 模块的对应关系，不能灵活变动。</p>
+<p>###2、调整的方案</p>
+<p>有两个方案，目前选用的是方案一</p>
+<p>1）方案一：独立的 ES shade 工程</p>
+<p>优点：整体代码更轻量，编译和调试较为方便</p>
+<p>缺点：要引用 graph-server-api、graph-feign-api、graph-common 等等的公共代码，这些公共代码的包版本号、代码内容会随着迭代一直升级变化， 而 ES shade 作为独立工程不能自动感知及重新打包，会引起潜在的运行时错误。</p>
+<p>2）方案二：ES shade 工程保留在 graph 父工程中，但在 POM 中不构成父子工程关系，仍然保持独立</p>
+<p>优点：ES shade 的工程可以在 idea 编译环境显式地引用公共代码，如果公共代码的包版本号或者代码内容有变化，可以便捷地发现并同步修改，并重新打包</p>
+<p>缺点：和 graph 整体工程关联，编译和调试较重</p>
+<p>###3、新的项目结构</p>
+<p>graph-server-es-shaded</p>
+<p>– graph-server-es-base（公共类）</p>
+<p>– graph-server-es-api（对外接口）</p>
+<p>– graph-server-es-router（承接外部调用、自动路由 ES 不同版本的实现类的处理器）</p>
+<p>– graph-server-es5（ES 5.x，单独打包）</p>
+<p>– graph-server-es5-tdh523（ES 5.x + TDH 5.2.3，单独打包）</p>
+<p>– graph-server-es5-tdh603（ES 5.x + TDH 6.0.3，单独打包）</p>
+<p>– graph-server-es5-tdh622（ES 5.x + TDH 6.2.2，单独打包）</p>
+<p>– graph-server-es6（ES 6.x，单独打包）</p>
+<p>– graph-server-es7（ES 7.x，单独打包）</p>
+<p>说明：</p>
+<p>1、各个 graph-server-esX 的独立工程的 POM 中都定义了各个支持的大数据平台的对应的 profile，需要逐一打包并存放到 Nexus 依赖包仓库，最终引入到 graph 工程中。</p>
+<p>2、graph-server-es-router 的 POM 文件将 graph-server-es-base、graph-server-esX-XXX（所有支持的ES版本+大数据平台特定ES基础包）都引入为依赖包，从而在 graph 打包时自动引入。</p>
+<p>###4、版本自动选择的逻辑 1）按路径隔离的规则调节 graph-server-esX 中的包和类结构</p>
+<p>I、包的根路径统一为 com.haizhi.graph.server.es${ES版本号}，同时打 jar 包时加上前缀 es${ES版本号}.${大数据平台版本号}，通过路径隔离实现不同版本的自动加载；</p>
+<p>例如：es6.fi651.com.haizhi.graph.server.es6</p>
+<p>II、各个工程下统一实现3个主要类：EsRestClient、EsIndexDaoImpl、EsSearchDaoImpl，并且包路径固定；</p>
+<p>2）制作所有支持的 ES shade jar</p>
+<p>各个 graph-server-esX 的独立工程的 POM 中都定义了各个支持的大数据平台的对应的 profile，逐一打包成 jar，并存放到 Nexus 依赖包仓库。</p>
+<p>如果是标准版本的 ES ，profile 中引用的是 org.elasticsearch.client:elasticsearch-rest-high-level-client，而如果是特定大数据平台上的 ES， 引用的是其专用的 elasticsearch-rest-client 和 elasticsearch-rest-high-level-client。</p>
+<p>例如 FI 651 引用的是 com.huawei.bigdata:elasticsearch-rest-client-fi，这是从 FI 环境中下载得到的包。</p>
+<p>3）通过路由类 EsBeanRouter.java 加载版本的实现类 主要的实现类有：EsRestClient、EsIndexDaoImpl、EsSearchDaoImpl。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">EsBeanRouter.java 的核心代码如下：</span><br><span class="line"></span><br><span class="line">private static final String INDEX_DAO_CLASS = &quot;es%s.%s.com.haizhi.graph.server.es%s.index.EsIndexDaoImpl&quot;;</span><br><span class="line">private static final String SEARCH_DAO_CLASS = &quot;es%s.%s.com.haizhi.graph.server.es%s.search.EsSearchDaoImpl&quot;;</span><br><span class="line">private static final String REST_CLIENT_CLASS = &quot;es%s.%s.com.haizhi.graph.server.es%s.client.EsRestClient&quot;;</span><br><span class="line"></span><br><span class="line">* 说明：optClassPath = INDEX_DAO_CLASS | SEARCH_DAO_CLASS</span><br><span class="line">loadClass(String esVersion, String envVersion, String optClassPath) &#123;</span><br><span class="line">    // 例: -&gt; es6.fi651.com.haizhi.graph.server.es6.index.EsIndexDaoImpl</span><br><span class="line">    String optClassPath = String.format(optClassPath, esVersion, envVersion, esVersion);</span><br><span class="line">    String clientClassPath = String.format(REST_CLIENT_CLASS, esVersion, envVersion, esVersion);</span><br><span class="line"></span><br><span class="line">    Class optClazz = null;</span><br><span class="line">    Class clientClazz = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        ClassLoader clazzLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        optClazz = clazzLoader.loadClass(optClassPath);</span><br><span class="line">        clientClazz = clazzLoader.loadClass(clientClassPath);</span><br><span class="line">    &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">        log.error(&quot;不支持的 ES 版本 [&quot; + esVersion + &quot;] + 大数据平台 [&quot; + envVersion + &quot;]&quot;, e);</span><br><span class="line">        throw new EsServerException(&quot;不支持的 ES 版本 [&quot; + esVersion + &quot;] + 大数据平台 [&quot; + envVersion + &quot;]&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        ApplicationContext applicationContext = SpringContextUtils.getContext();</span><br><span class="line">        // 将 applicationContext 转换为 ConfigurableApplicationContext</span><br><span class="line">        ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) applicationContext;</span><br><span class="line">        // 获取 bean 工厂并转换为 DefaultListableBeanFactory</span><br><span class="line">        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) configurableApplicationContext.getBeanFactory();</span><br><span class="line"></span><br><span class="line">        // Spring 加载对应版本的 EsRestClient (仅一次)</span><br><span class="line">        if (!defaultListableBeanFactory.containsBeanDefinition(clientClassPath)) &#123;</span><br><span class="line">            BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clientClazz);</span><br><span class="line">            defaultListableBeanFactory.registerBeanDefinition(clientClassPath, beanDefinitionBuilder.getRawBeanDefinition());</span><br><span class="line">        &#125;</span><br><span class="line">        // Spring 加载对应版本的 EsIndexDaoImpl | EsSearchDaoImpl (仅一次)</span><br><span class="line">        if (!defaultListableBeanFactory.containsBeanDefinition(optClassPath)) &#123;</span><br><span class="line">            BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(optClazz);</span><br><span class="line">            defaultListableBeanFactory.registerBeanDefinition(optClassPath, beanDefinitionBuilder.getRawBeanDefinition());</span><br><span class="line">        &#125;</span><br><span class="line">        T bean = (T) SpringContextUtils.getBean(optClazz);</span><br><span class="line"></span><br><span class="line">        // 用 MAP 缓存起来，仅首次使用时需要加载</span><br><span class="line">        beanCache.put(cacheKey, bean);</span><br><span class="line"></span><br><span class="line">        return bean;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;初始化 ES 处理器遇到故障: &quot;, e);</span><br><span class="line">        throw new EsServerException(&quot;初始化 ES 处理器遇到故障: &quot; + e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重点说明： 1、loadClass() 中的 esVersion 来自 sys_dict 表中的 ES 版本号，目前仅支持路由到顶层的版本号（没有支持小版本号），例如 6.7.1，只支持到6， 所有这个版本都使用同一个 ES 基础包做 shade jar； 2、loadClass() 中的 envVersion 来自配置的 ES 连接，如果有指定大数据平台，就取 sys_dict 表中对应的平台版本号，否则就使用默认的值 cdh514。</p>
+<p>4）graph-server-es-router 分别实现 EsIndexDao 和 EsSearchDao 供外部引用，内部通过 EsBeanRouter 路由去对应的实现类</p>
+<p>【说明】</p>
+<p>EsShadedIndexDao 和 EsSahdedSearchDao 仅继承了原有的 EsIndexDao 和 EsSearchDao 对外操作接口，但没有增加接口方法，</p>
+<p>这使得 graph-server-es-router 的实现类与 graph-server-esX-XXX.jar 中的实现类有一致的方法列表，同时当 EsIndexDao 和 EsSearchDao 增加对外方法时，</p>
+<p>各个实现类都能在 idea 中自动发现编译错误并驱使开发人员进行相应的处理（在所有工程中实现这个新接口并重新打包上传）。</p>
+<p>###5、工程维护</p>
+<p>1）支持更多 ES + 大数据平台的版本</p>
+<p>I、增加对应的 graph-server-esX 子工程，或者在已有 ES 版本的子工程下增加 profile，如果子工程下的代码不能兼容平台特有的 ES 基础包，则需要增加新的子工程；</p>
+<p>例如：graph-server-es5-tdh603，这是由于 graph-server-es5 不能兼容而单独制作的版本</p>
+<p>II、如果依赖的对外接口（graph-server-api）、公共类（graph-common）有变化，视情况来决定是否重新打 shade jar 并覆盖上传到 Nexus 包仓库。</p>
+<p>###6、遗留问题</p>
+<p>1）第三方包类被 shaded 入 ES jar 的类，可能会隐含版本冲突</p>
+<p>由于对第3方包的引用非常广泛，如果将 es5.cdh514 这种特定的前缀也加到对第三方类的引用路径前面，需要穷尽所有的依赖包到 shade 工程中才能确保不出现 ClassNotFoundException，工作量较大。</p>
+<p>举例：某个类引用了另一个类 org.apache.commons.C1，如果针对 org.apache.commons 路径映射成 es5.cdh514.org.apache.commons，但此时有另一个包里有类C2在同样的路径下，</p>
+<p>但没有被引入到工程中，那么运行时尝试去找 es5.cdh514.org.apache.commons.C2 的时候就找不到（因为它的实际路径仍然是 org.apache.commons.C2）</p>
+<p>现在第三方包暂时以原路径的方式打包到 shade jar 中，各工程引用的版本相同或相近，类版本冲突的风险较小，但如果后续如果其他工程对第三包升级而 es shade jar 不升级，有可能造成版本冲突。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/es/" rel="tag"># es</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2023/02/17/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E6%9E%B6%E6%9E%84/" rel="next" title="知识图谱架构">
+                <i class="fa fa-chevron-left"></i> 知识图谱架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lin chuxing</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
